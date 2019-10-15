@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import Countdown from '../components/Left/countdown/countdown.component';
+import Container from '../components/Left/container/container.component';
 import Newsletter from '../components/Right/newsletter/newsletter.component';
 
 export default class Homepage extends Component {
@@ -12,7 +12,7 @@ export default class Homepage extends Component {
     `;
     return (
       <Page>
-        <Countdown />
+        <Container />
         <Newsletter />
       </Page>
     );
