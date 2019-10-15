@@ -1,66 +1,87 @@
-import React from 'react';
+import React, { Component } from 'react';
+import moment from 'moment';
+
 import styled from 'styled-components';
 
-import DcImage from '../../../static/images/WashingtonDC-Ansh-unsplash.jpg';
+export default class Countdown extends Component {
+  constructor(props) {
+    super(props);
+    // updated in componentDidMount
+    this.state = {
+      days: undefined,
+      hours: undefined,
+      minutes: undefined,
+      seconds: undefined
+    };
+  }
 
-const Countdown = () => {
-  const CountdownCol = styled.div`
-    background: linear-gradient(
-        to right bottom,
-        rgba(0, 102, 135, 0.4),
-        rgba(0, 102, 135, 0.4)
-      ),
-      url(${DcImage});
-    background-position: center;
-    background-size: cover;
-  `;
-  const Time = styled.div`
-    color: #fff;
-    text-transform: uppercase;
-    width: 90%;
-    display: flex;
-    justify-content: center;
-    letter-spacing: 0.3em;
-    span {
-      padding: 0 20px;
-      font-size: 12px;
-      font-weight: 600;
-      div {
-        font-size: 40px;
-      }
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      // then is the time you count down from
+      const then = moment('20191027', 'YYYYMMDD');
+      const now = moment();
+      const countdown = moment(then - now);
+      const days = countdown.format('D');
+      const hours = countdown.format('HH');
+      const minutes = countdown.format('mm');
+      const seconds = countdown.format('ss');
+
+      this.setState({ days, hours, minutes, seconds });
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    if (this.interval) {
+      clearInterval(this.interval);
     }
-  `;
-  const Middle = styled.div`
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center;
-  `;
-  return (
-    <CountdownCol className="col">
-      <Middle>
-        <Time>
-          <span>
-            <div id="days">12</div>
-            days
-          </span>
-          <span>
-            <div id="hours">06</div>
-            hours
-          </span>
-          <span>
-            <div id="minutes">35</div>
-            minutes
-          </span>
-          <span>
-            <div id="seconds">26</div>
-            seconds
-          </span>
-        </Time>
-      </Middle>
-    </CountdownCol>
-  );
-};
-
-export default Countdown;
+  }
+  render() {
+    const Time = styled.div`
+      color: #fff;
+      text-transform: uppercase;
+      width: 90%;
+      display: flex;
+      justify-content: center;
+      letter-spacing: 0.3em;
+      span {
+        padding: 0 20px;
+        font-size: 12px;
+        font-weight: 600;
+        div {
+          font-size: 40px;
+        }
+      }
+    `;
+    const Loading = styled.h1`
+      color: #fff;
+      text-transform: uppercase;
+    `;
+    const { days, seconds, minutes, hours } = this.state;
+    return (
+      <>
+        {days === undefined ? (
+          <Loading>Loading...</Loading>
+        ) : (
+          <Time>
+            <span>
+              <div id="days">{`${days}`}</div>
+              days
+            </span>
+            <span>
+              <div id="hours">{hours}</div>
+              hours
+            </span>
+            <span>
+              <div id="minutes">{minutes}</div>
+              minutes
+            </span>
+            <span>
+              <div id="seconds">{seconds}</div>
+              seconds
+            </span>
+          </Time>
+        )}
+      </>
+    );
+  }
+}
